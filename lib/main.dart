@@ -1,6 +1,7 @@
-import 'file:///C:/Users/jpdco/AndroidStudioProjects/eco_point_app/lib/Screens/Welcome/Welcome_screen.dart';
+import 'Screens/Welcome/Welcome_screen.dart';
 import 'package:eco_point_app/constants.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 void main() {
   runApp(MyApp());
