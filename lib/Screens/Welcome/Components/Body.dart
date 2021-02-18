@@ -37,11 +37,25 @@ class Body extends StatelessWidget {
             alignment: Alignment.topLeft,
             child: TextFormField(
               decoration: InputDecoration(
-                  labelText: 'Enter your username'
+                  labelText: 'Nome do utilizador'
               ),
             ),
           ),
-
+          Align(
+            alignment: Alignment.topLeft,
+            child: TextFormField(
+              decoration: InputDecoration(
+                  labelText: 'Email do utilizador'
+              ),
+            ),
+          ),
+          TextField(
+            obscureText: true,
+            decoration: InputDecoration(
+              border: OutlineInputBorder(),
+              labelText: 'Password',
+            ),
+          )
         ],
       ),
     );
