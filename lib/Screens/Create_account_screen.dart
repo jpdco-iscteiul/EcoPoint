@@ -173,14 +173,12 @@ class _SignUpState extends State<Create_account_screen> {
   }
 
   Future<void> creatProfile(ParseUser user) async {
-    final profile = ParseObject('Detalhes_Conta')..set('UserId', user.objectId);
+    final profile = ParseObject('Detalhes_Conta')..set('UserId', user);
     var response = await profile.save();
 
     if(response.success){
-        user..set('Conta_Id', profile.objectId);
-        final response2 = await user.save();
-        if(!!response2.success)
-          showError('foda-se');
+        user..set('Conta_Id', profile);
+        final response2 = await user.update();
     }
     else{
 
