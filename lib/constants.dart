@@ -9,4 +9,4 @@ const kContrastColor = Color(0xFF2B2B2B);
 String kParseApplicationId= "2Uo1ieG4kQ6FGVJscXUDDibO4wZRz9R12nQ2GBji";
 String kParseClientKey = "n1TjED4DzirLAyYhWtS16wsSm9MolDKIyU5vfvnu";
 String kParseMasterKey = "IotbCAOvEzgVKs6SZwaaO40UEB045o2LNxMQpwgn";
-String kUrl= "https://parseapi.back4app.com/graphql";
+String kUrl= "https://parseapi.back4app.com/";
