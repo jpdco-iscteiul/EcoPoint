@@ -1,7 +1,8 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:parse_server_sdk/parse_server_sdk.dart';
-
+import 'Log_in_screen.dart';
 import '../constants.dart';
 
 // ignore: camel_case_types
@@ -115,9 +116,10 @@ class _SignUpState extends State<Create_account_screen> {
                                   color: Colors.black, fontSize: 18),
                               children: <TextSpan>[
                                 TextSpan(
-                                    text: " Sign Up",
-                                    style: TextStyle(color: kPrimaryLightColor)
-                                )
+                                    text: " Log In",
+                                    style: TextStyle(color: kPrimaryLightColor),
+                                    recognizer: new TapGestureRecognizer()..onTap = () => navigateToLogInPage(context)
+                        )
                               ]
                           ),
                         ),
@@ -172,7 +174,7 @@ class _SignUpState extends State<Create_account_screen> {
     );
   }
 
-  Future<void> creatProfile(ParseUser user) async {
+  Future<void> createProfile(ParseUser user) async {
     final profile = ParseObject('Detalhes_Conta')..set('UserId', user);
     var response = await profile.save();
 
@@ -196,12 +198,20 @@ class _SignUpState extends State<Create_account_screen> {
     var response = await user.signUp();
 
     if (response.success) {
-      creatProfile(user);
+      createProfile(user);
       showSuccess();
 
     } else {
       showError(response.error.message);
     }
   }
+
+  navigateToLogInPage(BuildContext context) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => Log_in_screen()),
+    );
+  }
+
 }
 

@@ -1,14 +1,21 @@
 import 'package:eco_point_app/Screens/Create_account_screen.dart';
-import 'package:eco_point_app/Screens/Welcome/Welcome_screen.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_signin_button/button_list.dart';
 import 'package:flutter_signin_button/button_view.dart';
+import 'package:parse_server_sdk/parse_server_sdk.dart';
 import '../constants.dart';
-//import 'package:flutter_signin_button/flutter_signin_button.dart';
 
 
-class Log_in_screen extends StatelessWidget {
+class Log_in_screen extends StatefulWidget{
+    _Log_in_state createState() => _Log_in_state();
+}
+
+class _Log_in_state extends State<Log_in_screen> {
+
+  final controlUsername = TextEditingController();
+  final controlPassword = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size; // total height and wight of the screen
@@ -47,6 +54,7 @@ class Log_in_screen extends StatelessWidget {
                   Align(
                     alignment: Alignment.topLeft,
                     child: TextFormField(
+                      controller: controlUsername,
                       decoration:
                       InputDecoration(labelText: 'Nome do utilizador'),
                     ),
@@ -54,8 +62,10 @@ class Log_in_screen extends StatelessWidget {
                   Align(
                     alignment: Alignment.topLeft,
                     child: TextFormField(
+                      controller: controlPassword,
+                      obscureText: true,
                       decoration:
-                      InputDecoration(labelText: 'Email do utilizador'),
+                      InputDecoration(labelText: 'Password'),
                     ),
                   ),
                   Padding(
@@ -72,10 +82,10 @@ class Log_in_screen extends StatelessWidget {
                         borderRadius: BorderRadius.circular(18),
                       ),
                       onPressed: () {
-                        //createAccount();
+                        LogIn();
                       },
                       child: Text(
-                        "Sign Up",
+                        "Log In",
                         style: TextStyle(fontSize: 20.0),
                       ),
                     ),
@@ -119,5 +129,62 @@ class Log_in_screen extends StatelessWidget {
       MaterialPageRoute(builder: (context) => Create_account_screen()),
     );
   }
+
+  void showSuccess() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text("Success!"),
+          content: const Text("User was successfully created!"),
+          actions: <Widget>[
+            new FlatButton(
+              child: const Text("OK"),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  void showError(String errorMessage) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text("Error!"),
+          content: Text(errorMessage),
+          actions: <Widget>[
+            new FlatButton(
+              child: const Text("OK"),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  void LogIn() async {
+    final username = controlUsername.text.trim();
+    final password = controlPassword.text.trim();
+
+
+    final user = ParseUser.createUser(username, password);
+    var response = await user.login();
+
+    if (response.success) {
+      ParseUser useraux = await ParseUser.currentUser();
+      print(useraux);
+    } else {
+      showError(response.error.message);
+    }
+  }
+
 
 }
