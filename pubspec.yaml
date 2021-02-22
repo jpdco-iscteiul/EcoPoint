@@ -31,6 +31,8 @@ dependencies:
 
   graphql_flutter: ^4.0.0-beta
   parse_server_sdk: ^2.1.0
+  flutter_signin_button: ^1.1.0
+  font_awesome_flutter: ^8.4.0
 
 dev_dependencies:
   flutter_test:
