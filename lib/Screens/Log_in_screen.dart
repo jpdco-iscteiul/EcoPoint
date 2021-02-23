@@ -5,6 +5,7 @@ import 'package:flutter_signin_button/button_list.dart';
 import 'package:flutter_signin_button/button_view.dart';
 import 'package:parse_server_sdk/parse_server_sdk.dart';
 import '../constants.dart';
+import 'Welcome/Components/Home_screen.dart';
 
 
 class Log_in_screen extends StatefulWidget{
@@ -85,6 +86,11 @@ class _Log_in_state extends State<Log_in_screen> {
                                 ),
                                 onPressed: () {
                                   LogIn();
+                                  LogIn();
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(builder: (context) => Home_screen()),
+                                  );
                                 },
                                 child: Text(
                                   "Log In",
