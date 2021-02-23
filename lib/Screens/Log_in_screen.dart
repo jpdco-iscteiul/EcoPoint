@@ -25,16 +25,14 @@ class _Log_in_state extends State<Log_in_screen> {
         Container(
           padding: EdgeInsets.fromLTRB(25, 25, 25, 25),
           //color : Colors.black,
-          child: Column(
-            children: [
-              Image.asset(
-                'assets/images/Logo_s_texto.png',
-                width: 500,
-                height: 240,
-                fit: BoxFit.cover,
-              ),
-              Column(
+             child: Column(
                 children: [
+                  Image.asset(
+                    'assets/images/Logo_s_texto.png',
+                    width: 500,
+                    height: 240,
+                    fit: BoxFit.cover,
+                  ),
                   Text(
                     "Bem-vindo(a)!",
                     style: TextStyle(
@@ -51,78 +49,91 @@ class _Log_in_state extends State<Log_in_screen> {
                         fontWeight: FontWeight.w300,
                         fontFamily: "Roboto"),
                   ),
-                  Align(
-                    alignment: Alignment.topLeft,
-                    child: TextFormField(
-                      controller: controlUsername,
-                      decoration:
-                      InputDecoration(labelText: 'Nome do utilizador'),
-                    ),
-                  ),
-                  Align(
-                    alignment: Alignment.topLeft,
-                    child: TextFormField(
-                      controller: controlPassword,
-                      obscureText: true,
-                      decoration:
-                      InputDecoration(labelText: 'Password'),
-                    ),
-                  ),
-                  Padding(
-                    padding: EdgeInsets.fromLTRB(0, 20, 0, 10),
-                    child: FlatButton(
-                      minWidth: size.width,
-                      color: kPrimaryColor,
-                      textColor: Colors.white,
-                      disabledColor: Colors.grey,
-                      disabledTextColor: Colors.black,
-                      padding: EdgeInsets.all(8.0),
-                      focusColor: kPrimaryLightColor,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(18),
+                  Expanded(
+                    child: SingleChildScrollView(
+                      child: Column(
+                          children:[
+                            Align(
+                              alignment: Alignment.topLeft,
+                              child: TextFormField(
+                                controller: controlUsername,
+                                decoration:
+                                InputDecoration(labelText: 'Nome do utilizador'),
+                              ),
+                            ),
+                            Align(
+                              alignment: Alignment.topLeft,
+                              child: TextFormField(
+                                controller: controlPassword,
+                                obscureText: true,
+                                decoration:
+                                InputDecoration(labelText: 'Password'),
+                              ),
+                            ),
+                            Padding(
+                              padding: EdgeInsets.fromLTRB(0, 20, 0, 10),
+                              child: FlatButton(
+                                minWidth: size.width,
+                                color: kPrimaryColor,
+                                textColor: Colors.white,
+                                disabledColor: Colors.grey,
+                                disabledTextColor: Colors.black,
+                                padding: EdgeInsets.all(8.0),
+                                focusColor: kPrimaryLightColor,
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(18),
+                                ),
+                                onPressed: () {
+                                  LogIn();
+                                },
+                                child: Text(
+                                  "Log In",
+                                  style: TextStyle(fontSize: 20.0),
+                                ),
+                              ),
+                            ),
+                            SignInButton(
+                              Buttons.Google,
+                              text: "Sign up with Google",
+                              onPressed: () {},
+                            ),
+                            SignInButton(
+                              Buttons.Facebook,
+                              text: "Sign up with Facebook",
+                              onPressed: () {
+                                test();
+                              },
+                            ),
+                            RichText(
+                              text: TextSpan(
+                                  text: 'Não possui conta?',
+                                  style: TextStyle(
+                                      color: Colors.black, fontSize: 18),
+                                  children: <TextSpan>[
+                                    TextSpan(
+                                        text: " Sign up",
+                                        style: TextStyle(color: kPrimaryLightColor),
+                                        recognizer: new TapGestureRecognizer()..onTap = () => navigateToSignUpPage(context)
+                                    )
+                                  ]
+                              ),
+                            ),
+                          ]
                       ),
-                      onPressed: () {
-                        LogIn();
-                      },
-                      child: Text(
-                        "Log In",
-                        style: TextStyle(fontSize: 20.0),
-                      ),
                     ),
                   ),
-                  SignInButton(
-                    Buttons.Google,
-                    text: "Sign up with Google",
-                    onPressed: () {},
-                  ),
-                   SignInButton(
-                    Buttons.Facebook,
-                    text: "Sign up with Facebook",
-                    onPressed: () {},
-                  ),
-                  RichText(
-                    text: TextSpan(
-                        text: 'Não possui conta?',
-                        style: TextStyle(
-                            color: Colors.black, fontSize: 18),
-                        children: <TextSpan>[
-                          TextSpan(
-                              text: " Sign up",
-                              style: TextStyle(color: kPrimaryLightColor),
-                              recognizer: new TapGestureRecognizer()..onTap = () => navigateToSignUpPage(context)
-                          )
-                        ]
-                    ),
-                  ),
+
                 ],
               ),
-            ],
-          ),
+
         )
     );
     throw UnimplementedError();
   }
 
+  Future<void> test() async {
+    print(await ParseUser.currentUser());
+  }
   navigateToSignUpPage(BuildContext context) {
     Navigator.push(
       context,

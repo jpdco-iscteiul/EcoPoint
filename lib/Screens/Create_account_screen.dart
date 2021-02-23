@@ -119,13 +119,14 @@ class _SignUpState extends State<Create_account_screen> {
                                     text: " Log In",
                                     style: TextStyle(color: kPrimaryLightColor),
                                     recognizer: new TapGestureRecognizer()..onTap = () => navigateToLogInPage(context)
-                        )
+                                )
                               ]
                           ),
                         ),
                       ),
                     ),
-                  ]),
+                  ]
+                  ),
                 ),
               ),
             ],
