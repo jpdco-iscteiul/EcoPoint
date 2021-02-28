@@ -102,7 +102,7 @@ class _Log_in_state extends State<Log_in_screen> {
                               Buttons.Facebook,
                               text: "Sign up with Facebook",
                               onPressed: () {
-                                test();
+                                //test();
                               },
                             ),
                             RichText(
