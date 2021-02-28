@@ -86,11 +86,6 @@ class _Log_in_state extends State<Log_in_screen> {
                                 ),
                                 onPressed: () {
                                   LogIn();
-                                  LogIn();
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(builder: (context) => Home_screen()),
-                                  );
                                 },
                                 child: Text(
                                   "Log In",
@@ -147,6 +142,7 @@ class _Log_in_state extends State<Log_in_screen> {
     );
   }
 
+
   void showSuccess() {
     showDialog(
       context: context,
@@ -197,8 +193,15 @@ class _Log_in_state extends State<Log_in_screen> {
 
     if (response.success) {
       ParseUser useraux = await ParseUser.currentUser();
-      print(useraux);
-    } else {
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => Home_screen()),
+      );
+      } else {
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => Log_in_screen()),
+      );
       showError(response.error.message);
     }
   }

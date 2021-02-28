@@ -1,6 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
+import '../../../constants.dart';
+
 class NavDrawer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -9,15 +11,11 @@ class NavDrawer extends StatelessWidget {
         padding: EdgeInsets.zero,
         children: <Widget>[
           DrawerHeader(
-            child: Text(
-              'Side menu',
-              style: TextStyle(color: Colors.white, fontSize: 25),
-            ),
             decoration: BoxDecoration(
-                color: Colors.green,
+                color: kContrastColor,
                 image: DecorationImage(
                     fit: BoxFit.fill,
-                    image: AssetImage('assets/images/Logo_s_texto.jpg'))),
+                    image: AssetImage('assets/images/Logo_s_texto.png'))),
           ),
           ListTile(
             leading: Icon(Icons.input),
