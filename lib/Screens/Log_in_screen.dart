@@ -1,3 +1,5 @@
+import 'dart:collection';
+
 import 'package:eco_point_app/Screens/Create_account_screen.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -102,7 +104,7 @@ class _Log_in_state extends State<Log_in_screen> {
                               Buttons.Facebook,
                               text: "Sign up with Facebook",
                               onPressed: () {
-                                //test();
+                                test2();
                               },
                             ),
                             RichText(
@@ -135,10 +137,20 @@ class _Log_in_state extends State<Log_in_screen> {
   Future<void> test() async {
     print(await ParseUser.currentUser());
   }
+
   navigateToSignUpPage(BuildContext context) {
     Navigator.push(
       context,
       MaterialPageRoute(builder: (context) => Create_account_screen()),
+    );
+  }
+  
+  void test2(){
+    Map<String, String> parameters = new HashMap<String,String>();
+    
+    ParseCloudFunction("hello").execute(parameters: parameters).then((value) =>{
+      print(value.result)
+    }
     );
   }
 
