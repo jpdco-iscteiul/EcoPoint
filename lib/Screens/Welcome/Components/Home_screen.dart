@@ -1,3 +1,4 @@
+import 'package:eco_point_app/Screens/Adquirir_Vouchers.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:parse_server_sdk/parse_server_sdk.dart';
@@ -17,13 +18,12 @@ class _Home_screen_state extends State<Home_screen> {
   @override
   void initState() {
     super.initState();
-    futureData = fetchData(); // Here you have the data that you need
+    someMethod();
   }
 
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size; // total height and wight of the screen
-    someMethod();
 
     return Scaffold(
 
@@ -37,13 +37,7 @@ class _Home_screen_state extends State<Home_screen> {
           children: [
             Align(
               alignment: Alignment.center,
-              child: Text(
-                '' +  pontos,
-                style: TextStyle(
-                    color: kPrimaryColor,
-                      fontSize: 80
-                ),
-              ),
+              child: loadPoints(),
             ),
             Padding(
               padding: EdgeInsets.fromLTRB(0, 20, 0, 10),
@@ -81,7 +75,10 @@ class _Home_screen_state extends State<Home_screen> {
                   borderRadius: BorderRadius.circular(18),
                 ),
                 onPressed: () {
-                  //TODO
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => Adquirir_Vouchers()),
+                  );
                 },
                 child: Text(
                   "Retrieve voucher",
@@ -117,10 +114,26 @@ class _Home_screen_state extends State<Home_screen> {
     );
   }
 
+  Widget loadPoints(){
+    if(pontos == null){
+      return CircularProgressIndicator();
+    }
+    else{
+      return Text(
+        pontos,
+        style: TextStyle(
+            color: kPrimaryColor,
+            fontSize: 80
+        ),
+      );
+    }
+  }
 
   String someMethod() {
-    fetchData().then((s) {
-      pontos=s;
+     fetchData().then((s) {
+      setState(() {
+        pontos=s;
+      });
       return s.toString();
     });
   }

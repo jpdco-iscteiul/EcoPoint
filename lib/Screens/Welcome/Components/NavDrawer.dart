@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import '../../../constants.dart';
+import 'Home_screen.dart';
 
 class NavDrawer extends StatelessWidget {
   @override
@@ -16,6 +17,17 @@ class NavDrawer extends StatelessWidget {
                 image: DecorationImage(
                     fit: BoxFit.fill,
                     image: AssetImage('assets/images/Logo_s_texto.png'))),
+          ),
+          ListTile(
+            leading: Icon(Icons.input),
+            title: Text('Home'),
+            onTap: () => {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => Home_screen()),
+            )
+            },
+
           ),
           ListTile(
             leading: Icon(Icons.input),
