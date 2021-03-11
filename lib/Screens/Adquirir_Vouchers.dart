@@ -12,7 +12,8 @@ class Adquirir_Vouchers extends StatefulWidget{
 }
 
 class Adquirir_Vouchers_State extends State<Adquirir_Vouchers>{
-  List vouch;
+  var marcas;
+  var vouchers;
 
   @override
   void initState() {
@@ -36,14 +37,22 @@ class Adquirir_Vouchers_State extends State<Adquirir_Vouchers>{
     );
   }
 
-  void getVouchersAvailable(){
+  Future<void> getVouchersAvailable() async {
     Map<String, String> parameters = new HashMap<String,String>();
 
-    ParseCloudFunction("getVouchersAvailable").execute(parameters: parameters).then((value) =>{
-     print( new List(value.result))
-
+    var info;
+     await ParseCloudFunction("getVouchersAvailable").execute(parameters: parameters).then((value) =>{
+      //new List(value.result)
+     //print(value.result)
+      info = value.result
     }
     );
+    //print(vouchers);
+    vouchers = info[0];
+    marcas = info[1];
+    for(final x in marcas){
+      print(x["objectId"]);
+    }
   }
 
 }
