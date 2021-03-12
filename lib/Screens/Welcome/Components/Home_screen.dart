@@ -140,10 +140,18 @@ class _Home_screen_state extends State<Home_screen> {
 
 
   Future<String> fetchData() async {
-    //var currentUser = ParseUser.currentUser().toString();
-    final detalhes = await ParseObject("Detalhes_Conta").getObject("2mKs0ADVXt");
-    final objeto = await detalhes.result['Pontos'].toString();
-    return objeto;
+    var user = await ParseUser.currentUser();
+    print(user);
+
+    var queryBuilder = QueryBuilder(ParseObject("Detalhes_Conta"))
+                        ..whereEqualTo("UserId", user);
+    var response = await queryBuilder.query();
+    if(response.success){
+      return response.result[0]["Pontos"].toString();
     }
+    else{
+      return "error";
+    }
+  }
 }
 
