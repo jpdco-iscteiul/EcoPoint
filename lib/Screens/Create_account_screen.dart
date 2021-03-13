@@ -47,7 +47,7 @@ class _SignUpState extends State<Create_account_screen> {
                 fit: BoxFit.cover,
               ),
               //form(context),
-              Expanded(
+              Expanded( //define um bloco de tamanho infinito
                 child: SingleChildScrollView(
                   child: Column(children: [
                     Align(

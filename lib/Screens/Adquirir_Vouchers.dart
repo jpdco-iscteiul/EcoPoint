@@ -10,6 +10,7 @@ import 'Welcome/Components/NavDrawer.dart';
 class Adquirir_Vouchers extends StatefulWidget{
   @override
   State<StatefulWidget> createState() => Adquirir_Vouchers_State();
+  // stateful widget - muda de estados
 }
 
 class Adquirir_Vouchers_State extends State<Adquirir_Vouchers>{
@@ -22,26 +23,26 @@ class Adquirir_Vouchers_State extends State<Adquirir_Vouchers>{
     // TODO: implement initState
     super.initState();
     getUserPoints();
-    getVouchersAvailable();
+    getVouchersAvailable(); //devolve um vetor com marcas
   }
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size; // total height and wight of the screen
 
-    return Scaffold(
+    return Scaffold( //tela
 
-      drawer: NavDrawer(),
-      appBar: AppBar(
+      drawer: NavDrawer(), //drawer=menu
+      appBar: AppBar( //barra com o titulo
         title: Text('Adquirir Vouchers'),
       ),
       body: Column(
-        children:[
+        children:[ //vetor da coluna
           Container(
-            margin: EdgeInsets.fromLTRB(20, 20, 20, 20),
+            margin: EdgeInsets.fromLTRB(20, 20, 20, 20), //margin= margem do objeto para fora; padding = moldura do objeto (para dentro)
             height: 50,
             width: 2*size.width/3,
             decoration: BoxDecoration(
-              color: kPrimaryLightColor,
+              color: kPrimaryLightColor, //cores estão no constants.dart
               borderRadius: BorderRadius.all(Radius.circular(10))
             ),
             child: Align(
@@ -57,7 +58,7 @@ class Adquirir_Vouchers_State extends State<Adquirir_Vouchers>{
             ),
           ),
           Container(
-            margin: EdgeInsets.fromLTRB(20, 20, 20, 20),
+            margin: EdgeInsets.fromLTRB(20, 0, 20, 20),
             height: 50,
             width: 2*size.width/3,
             decoration: BoxDecoration(
@@ -77,7 +78,51 @@ class Adquirir_Vouchers_State extends State<Adquirir_Vouchers>{
             ),
           ),
           Container(
-            padding: EdgeInsets.fromLTRB(25, 50, 25, 25),
+            alignment: Alignment.center,
+            child: Container( //container dos vouchers
+              padding: EdgeInsets.fromLTRB(15, 15, 15, 15),
+              height: 150,
+              width: 4*size.width/5,
+              decoration: BoxDecoration(
+                color: Colors.black,
+                borderRadius: BorderRadius.all(Radius.circular(10))
+              ),
+              child: Row(
+                children: [
+                  Expanded(
+                    flex: 4,
+                    child:Container(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                         Text(
+                          "Vale " + vouchers[0]["Valor"].toString() + "€",
+                          style: TextStyle(
+                            fontSize: 15,
+                            color: Colors.white,
+                          ),
+                        ),
+                        Text(
+                          vouchers[0]["Pontos"].toString() + " pontos",
+                          style: TextStyle(
+                            fontSize: 15,
+                            color: Colors.white,
+                          ),
+                        ),
+                      ],
+                     ),
+                    ),
+                  ),
+                    Expanded(
+                      flex: 6,
+                      child:Container(
+                        child: Image.network(marcas[2]["Logo"]["url"]),
+                      ),
+                    ),
+                ],
+              ),
+            ),
           ),
         ]
       )
@@ -96,7 +141,7 @@ class Adquirir_Vouchers_State extends State<Adquirir_Vouchers>{
     }
     );
     //print(vouchers);
-    setState(() {
+    setState(() { //povoamento dos vetores; marcas e vouchers ganham informação
       vouchers = info[0];
       marcas = info[1];
     });
@@ -106,7 +151,7 @@ class Adquirir_Vouchers_State extends State<Adquirir_Vouchers>{
     }
   }
   void getUserPoints() async {
-    var user = await ParseUser.currentUser();
+    var user = await ParseUser.currentUser(); // await= garante que so passo para a proxima linha depois deste procedimento acabar
     print(user);
 
     var queryBuilder = QueryBuilder(ParseObject("Detalhes_Conta"))
