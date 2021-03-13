@@ -1,4 +1,6 @@
 import 'package:eco_point_app/Screens/Adquirir_Vouchers.dart';
+import 'package:eco_point_app/Screens/Welcome/Components/GenerateScreen.dart';
+import 'package:eco_point_app/Screens/Welcome/Components/ScanScreen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:parse_server_sdk/parse_server_sdk.dart';
@@ -6,6 +8,8 @@ import '../../../constants.dart';
 import 'NavDrawer.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+
+import 'QR_Code.dart';
 
 class Home_screen extends StatefulWidget{
   _Home_screen_state createState() => _Home_screen_state();
@@ -53,7 +57,10 @@ class _Home_screen_state extends State<Home_screen> {
                   borderRadius: BorderRadius.circular(18),
                 ),
                 onPressed: () {
-                  //TODO
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => ScanScreen()),
+                  );
                 },
                 child: Text(
                   "Read QR code",
