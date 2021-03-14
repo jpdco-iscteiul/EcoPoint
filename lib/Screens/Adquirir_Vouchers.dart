@@ -147,12 +147,12 @@ class Adquirir_Vouchers_State extends State<Adquirir_Vouchers>{
     });
 
     for(final x in marcas){
-      print(x["objectId"]);
+      print(x["Logo"]["url"]);
     }
   }
   void getUserPoints() async {
     var user = await ParseUser.currentUser(); // await= garante que so passo para a proxima linha depois deste procedimento acabar
-    print(user);
+
 
     var queryBuilder = QueryBuilder(ParseObject("Detalhes_Conta"))
       ..whereEqualTo("UserId", user);

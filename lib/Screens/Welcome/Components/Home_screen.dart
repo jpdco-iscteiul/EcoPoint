@@ -1,4 +1,5 @@
 import 'package:eco_point_app/Screens/Adquirir_Vouchers.dart';
+import 'package:eco_point_app/Screens/Library.dart';
 import 'package:eco_point_app/Screens/Welcome/Components/GenerateScreen.dart';
 import 'package:eco_point_app/Screens/Welcome/Components/ScanScreen.dart';
 import 'package:flutter/cupertino.dart';
@@ -107,7 +108,10 @@ class _Home_screen_state extends State<Home_screen> {
                   borderRadius: BorderRadius.circular(18),
                 ),
                 onPressed: () {
-                  //TODO
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => Library()),
+                  );
                 },
                 child: Text(
                   "Vouchers library",
