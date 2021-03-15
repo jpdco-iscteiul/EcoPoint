@@ -1,4 +1,5 @@
 import 'dart:collection';
+import 'dart:math';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -16,8 +17,9 @@ class Adquirir_Vouchers extends StatefulWidget{
 class Adquirir_Vouchers_State extends State<Adquirir_Vouchers>{
   var marcas;
   var vouchers;
-  int pontos=0;
+  int pontos;
   Size size;
+  int pointer;
 
   @override
   void initState() {
@@ -47,19 +49,12 @@ class Adquirir_Vouchers_State extends State<Adquirir_Vouchers>{
             ),
             child: Align(
               alignment: Alignment.center,
-              child: Text(
-                pontos.toString()+" Pontos",
-                style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 25,
-                    fontWeight: FontWeight.bold,
-                ),
-              ),
+              child: loadPoints(),
             ),
           ),
-          getAllVouchersToShow(0),
-        ]
-      )
+          getAllVouchersToShow(pointer),
+        ],
+      ),
 
     );
   }
@@ -79,9 +74,8 @@ class Adquirir_Vouchers_State extends State<Adquirir_Vouchers>{
     setState(() { //povoamento dos vetores; marcas e vouchers ganham informação
       vouchers = info[0];
       marcas = info[1];
+      pointer = 0;
     });
-
-    getCorrectBrand(0);
   }
   void getUserPoints() async {
     var user = await ParseUser.currentUser(); // await= garante que so passo para a proxima linha depois deste procedimento acabar
@@ -91,32 +85,62 @@ class Adquirir_Vouchers_State extends State<Adquirir_Vouchers>{
       ..whereEqualTo("UserId", user);
     var response = await queryBuilder.query();
     if(response.success){
-      setState(pontos = response.result[0]["Pontos"]);
+      setState((){
+        pontos = response.result[0]["Pontos"];
+      });
     }
     else{
 
     }
   }
 
-  Container getAllVouchersToShow(int p){
+  Widget getAllVouchersToShow(int p){
+    if(pointer == null){
+      return   Expanded(
+        child: SingleChildScrollView(
+          child: Container(
+            alignment: Alignment.center,
+            child:CircularProgressIndicator(),
+          ),
+        ),
+      );
 
-    return Container(
-      child: Column(
-        children:[Voucher_View(p),
-        Voucher_View(p+1),
-        Voucher_View(p+2)]
-      ),
-    );
-
+    }
+    else {
+      return   Expanded(
+          child: SingleChildScrollView(
+            child: Container(
+              child: Column(
+                  children:organizeVoucherContainers(p*3)
+              ),
+            ),
+          ),
+      );
+    }
   }
 
+  List<Widget> organizeVoucherContainers(int i){
+
+    List <Widget> tripleVouchersDisplayed = List<Widget>();
+    for(int j=i;j<min(i+3,vouchers.length);j++)
+    {
+      tripleVouchersDisplayed.add(Voucher_View(j));
+    }
+    tripleVouchersDisplayed.add(catalogManager());
+    return tripleVouchersDisplayed;
+  }
+
+  // ignore: non_constant_identifier_names
   Container Voucher_View(int i){
     return Container(
       alignment: Alignment.center,
       child: Container( //container dos vouchers
         padding: EdgeInsets.fromLTRB(15, 15, 15, 15),
         margin: EdgeInsets.all(10),
-        height: 150,
+        //height: 120,
+        constraints: new BoxConstraints(
+          maxHeight: 120,
+        ),
         width: 4*size.width/5,
         decoration: BoxDecoration(
             color: Colors.black,
@@ -152,7 +176,10 @@ class Adquirir_Vouchers_State extends State<Adquirir_Vouchers>{
             Expanded(
               flex: 6,
               child:Container(
-                child: Image.network(marcas[getCorrectBrand(i)]["Logo"]["url"]),
+                child: Image.network(
+                  marcas[getCorrectBrand(i)]["Logo"]["url"],
+                  fit: BoxFit.fitHeight,
+                ),
               ),
             ),
           ],
@@ -172,6 +199,69 @@ class Adquirir_Vouchers_State extends State<Adquirir_Vouchers>{
       }
     }
     return a;
+  }
+
+  Widget loadPoints() {
+    if (pontos == null) {
+      return CircularProgressIndicator();
+    }
+    else {
+      return Text(
+        pontos.toString() + " Pontos",
+        style: TextStyle(
+          color: Colors.white,
+          fontSize: 25,
+          fontWeight: FontWeight.bold,
+        ),
+      );
+    }
+  }
+
+  Widget catalogManager(){
+    if(pointer==null)
+      return Container();
+    else
+      return  Container(
+        padding: EdgeInsets.all(10),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: [
+            IconButton(
+              icon: Icon(
+                Icons.arrow_back,
+                size: size.width/8,
+                color: pointer>0 ? kPrimaryColor : Colors.black12,
+              ),
+              onPressed: () {
+                if(pointer>0)
+                  setState(() {
+                    pointer--;
+                  });
+              },
+            ),
+            Text(
+                (pointer+1).toString(),
+              style: TextStyle(
+                fontSize: size.width/10,
+              ),
+            ),
+
+            IconButton(
+              icon: Icon(
+                Icons.arrow_forward,
+                size: size.width/8,
+                color: (pointer+1)*3<vouchers.length ? kPrimaryColor : Colors.black12,
+              ),
+              onPressed: () {
+                if((pointer+1)*3<vouchers.length)
+                  setState(() {
+                    pointer++;
+                  });
+              },
+            ),
+          ],
+        ),
+      );
   }
 
 }
