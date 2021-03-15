@@ -17,17 +17,17 @@ class Adquirir_Vouchers_State extends State<Adquirir_Vouchers>{
   var marcas;
   var vouchers;
   int pontos=0;
+  Size size;
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    getUserPoints();
     getVouchersAvailable(); //devolve um vetor com marcas
   }
   @override
   Widget build(BuildContext context) {
-    Size size = MediaQuery.of(context).size; // total height and wight of the screen
+    size = MediaQuery.of(context).size; // total height and wight of the screen
 
     return Scaffold( //tela
 
@@ -57,73 +57,7 @@ class Adquirir_Vouchers_State extends State<Adquirir_Vouchers>{
               ),
             ),
           ),
-          Container(
-            margin: EdgeInsets.fromLTRB(20, 0, 20, 20),
-            height: 50,
-            width: 2*size.width/3,
-            decoration: BoxDecoration(
-                color: kContrastColor,
-                borderRadius: BorderRadius.all(Radius.circular(10))
-            ),
-            child: Align(
-              alignment: Alignment.center,
-              child: Text(
-                pontos.toString()+" Pontos",
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 25,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-            ),
-          ),
-          Container(
-            alignment: Alignment.center,
-            child: Container( //container dos vouchers
-              padding: EdgeInsets.fromLTRB(15, 15, 15, 15),
-              height: 150,
-              width: 4*size.width/5,
-              decoration: BoxDecoration(
-                color: Colors.black,
-                borderRadius: BorderRadius.all(Radius.circular(10))
-              ),
-              child: Row(
-                children: [
-                  Expanded(
-                    flex: 4,
-                    child:Container(
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                         Text(
-                          "Vale " + vouchers[0]["Valor"].toString() + "€",
-                          style: TextStyle(
-                            fontSize: 15,
-                            color: Colors.white,
-                          ),
-                        ),
-                        Text(
-                          vouchers[0]["Pontos"].toString() + " pontos",
-                          style: TextStyle(
-                            fontSize: 15,
-                            color: Colors.white,
-                          ),
-                        ),
-                      ],
-                     ),
-                    ),
-                  ),
-                    Expanded(
-                      flex: 6,
-                      child:Container(
-                        child: Image.network(marcas[2]["Logo"]["url"]),
-                      ),
-                    ),
-                ],
-              ),
-            ),
-          ),
+          getAllVouchersToShow(0),
         ]
       )
 
@@ -131,6 +65,7 @@ class Adquirir_Vouchers_State extends State<Adquirir_Vouchers>{
   }
 
   void getVouchersAvailable() async {
+    getUserPoints();
     Map<String, String> parameters = new HashMap<String,String>();
 
     var info;
@@ -146,9 +81,7 @@ class Adquirir_Vouchers_State extends State<Adquirir_Vouchers>{
       marcas = info[1];
     });
 
-    for(final x in marcas){
-      print(x["Logo"]["url"]);
-    }
+    getCorrectBrand(0);
   }
   void getUserPoints() async {
     var user = await ParseUser.currentUser(); // await= garante que so passo para a proxima linha depois deste procedimento acabar
@@ -163,6 +96,82 @@ class Adquirir_Vouchers_State extends State<Adquirir_Vouchers>{
     else{
 
     }
+  }
+
+  Container getAllVouchersToShow(int p){
+
+    return Container(
+      child: Column(
+        children:[Voucher_View(p),
+        Voucher_View(p+1),
+        Voucher_View(p+2)]
+      ),
+    );
+
+  }
+
+  Container Voucher_View(int i){
+    return Container(
+      alignment: Alignment.center,
+      child: Container( //container dos vouchers
+        padding: EdgeInsets.fromLTRB(15, 15, 15, 15),
+        margin: EdgeInsets.all(10),
+        height: 150,
+        width: 4*size.width/5,
+        decoration: BoxDecoration(
+            color: Colors.black,
+            borderRadius: BorderRadius.all(Radius.circular(10))
+        ),
+        child: Row(
+          children: [
+            Expanded(
+              flex: 4,
+              child:Container(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Text(
+                      "Vale " + vouchers[i]["Valor"].toString() + "€",
+                      style: TextStyle(
+                        fontSize: 15,
+                        color: Colors.white,
+                      ),
+                    ),
+                    Text(
+                      vouchers[i]["Pontos"].toString() + " pontos",
+                      style: TextStyle(
+                        fontSize: 15,
+                        color: Colors.white,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            Expanded(
+              flex: 6,
+              child:Container(
+                child: Image.network(marcas[getCorrectBrand(i)]["Logo"]["url"]),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+  
+  
+
+  int getCorrectBrand(int i){
+    int a=0;
+    for(final x in marcas){
+      if(vouchers[i]["MarcaId"]["objectId"] == x["objectId"]) {
+        a = marcas.indexOf(x);
+        break;
+      }
+    }
+    return a;
   }
 
 }
