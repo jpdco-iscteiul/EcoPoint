@@ -11,7 +11,7 @@ class ScanScreen extends StatefulWidget {
 }
 
 class _ScanState extends State<ScanScreen> {
-  String barcode = "";
+  String barcode = "press the camera to start the scan !";
 
   @override
   initState() {
@@ -52,8 +52,11 @@ class _ScanState extends State<ScanScreen> {
 
   Future scan() async {
     try {
-      String barcode = (await BarcodeScanner.scan()) as String;
-      setState(() => this.barcode = barcode);
+      ScanResult qrScanResult = await BarcodeScanner.scan();
+      String qrResult = qrScanResult.rawContent;
+      setState(() {
+        barcode = qrResult;
+      });
     } on PlatformException catch (e) {
       if (e.code == BarcodeScanner.cameraAccessDenied) {
         setState(() {
