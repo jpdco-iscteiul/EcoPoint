@@ -264,4 +264,24 @@ class Adquirir_Vouchers_State extends State<Adquirir_Vouchers>{
       );
   }
 
+  void showError(int v, int m) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text("Tem certeza que pertende adquirir o seguinte voucher?"),
+          content: Text("errorMessage"),
+          actions: <Widget>[
+            new FlatButton(
+              child: const Text("OK"),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
 }

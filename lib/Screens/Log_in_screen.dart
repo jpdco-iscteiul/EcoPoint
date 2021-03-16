@@ -104,7 +104,6 @@ class _Log_in_state extends State<Log_in_screen> {
                               Buttons.Facebook,
                               text: "Sign up with Facebook",
                               onPressed: () {
-                                test2();
                               },
                             ),
                             RichText(
@@ -142,36 +141,6 @@ class _Log_in_state extends State<Log_in_screen> {
     Navigator.push(
       context,
       MaterialPageRoute(builder: (context) => Create_account_screen()),
-    );
-  }
-  
-  void test2(){
-    Map<String, String> parameters = new HashMap<String,String>();
-    
-    ParseCloudFunction("hello").execute(parameters: parameters).then((value) =>{
-      print(value.result)
-    }
-    );
-  }
-
-
-  void showSuccess() {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: const Text("Success!"),
-          content: const Text("User was successfully created!"),
-          actions: <Widget>[
-            new FlatButton(
-              child: const Text("OK"),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            ),
-          ],
-        );
-      },
     );
   }
 
