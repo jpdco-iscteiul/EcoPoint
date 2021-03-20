@@ -4,6 +4,7 @@ import 'package:barcode_scan/barcode_scan.dart';
 import 'package:eco_point_app/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:parse_server_sdk/parse_server_sdk.dart';
 
 class ScanScreen extends StatefulWidget {
   @override
@@ -50,12 +51,25 @@ class _ScanState extends State<ScanScreen> {
         ));
   }
 
+
+  Future<void> sendDataToDB() async {
+    var user = await ParseUser.currentUser();
+    final Map<String, String> params = {
+      "Conta_User":user.objectId,
+      "EcopontoID": barcode,
+      "Peso": "4",
+    };
+    await ParseCloudFunction("setUserWeighing").execute(parameters: params);
+  }
+
   Future scan() async {
     try {
       ScanResult qrScanResult = await BarcodeScanner.scan();
       String qrResult = qrScanResult.rawContent;
       setState(() {
         barcode = qrResult;
+       sendDataToDB();
+       print("DONE");
       });
     } on PlatformException catch (e) {
       if (e.code == BarcodeScanner.cameraAccessDenied) {

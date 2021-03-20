@@ -15,6 +15,7 @@ class Adquirir_Vouchers extends StatefulWidget{
 }
 
 class Adquirir_Vouchers_State extends State<Adquirir_Vouchers>{
+
   var marcas;
   var vouchers;
   int pontos;
