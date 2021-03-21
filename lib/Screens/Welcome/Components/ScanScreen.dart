@@ -66,7 +66,9 @@ class _ScanState extends State<ScanScreen> {
     try {
       ScanResult qrScanResult = await BarcodeScanner.scan();
       String qrResult = qrScanResult.rawContent;
+      var user = await ParseUser.currentUser();
       setState(() {
+        print(user);
         barcode = qrResult;
        sendDataToDB();
        print("DONE");

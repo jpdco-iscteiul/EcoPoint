@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:eco_point_app/Screens/Adquirir_Vouchers.dart';
 import 'package:eco_point_app/Screens/Library.dart';
 import 'package:eco_point_app/Screens/Welcome/Components/GenerateScreen.dart';
@@ -63,8 +65,35 @@ class _Home_screen_state extends State<Home_screen> {
                     MaterialPageRoute(builder: (context) => ScanScreen()),
                   );
                 },
+
                 child: Text(
                   "Read QR code",
+                  style: TextStyle(fontSize: 20.0),
+                ),
+              ),
+            ),
+            Padding(
+              padding: EdgeInsets.fromLTRB(0, 20, 0, 10),
+              child: FlatButton(
+                minWidth: size.width,
+                color: Color(0XFF616161),
+                textColor: Colors.white,
+                disabledColor: Colors.grey,
+                disabledTextColor: Colors.black,
+                padding: EdgeInsets.all(8.0),
+                focusColor: kPrimaryLightColor,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(18),
+                ),
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => GenerateScreen()),
+                  );
+                },
+
+                child: Text(
+                  "Generate QR code",
                   style: TextStyle(fontSize: 20.0),
                 ),
               ),
