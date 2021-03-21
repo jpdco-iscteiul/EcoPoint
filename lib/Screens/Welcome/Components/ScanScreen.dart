@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:math';
 
 import 'package:barcode_scan/barcode_scan.dart';
 import 'package:eco_point_app/constants.dart';
@@ -53,11 +54,13 @@ class _ScanState extends State<ScanScreen> {
 
 
   Future<void> sendDataToDB() async {
+    Random random = new Random();
+    double randomNumber = random.nextDouble() * 10;
     var user = await ParseUser.currentUser();
     final Map<String, String> params = {
       "Conta_User":user.objectId,
       "EcopontoID": barcode,
-      "Peso": "4",
+      "Peso": randomNumber.toString(),
     };
     await ParseCloudFunction("setUserWeighing").execute(parameters: params);
   }
