@@ -132,60 +132,65 @@ class Adquirir_Vouchers_State extends State<Adquirir_Vouchers>{
   }
 
   // ignore: non_constant_identifier_names
-  Container Voucher_View(int i){
-    return Container(
-      alignment: Alignment.center,
-      child: Container( //container dos vouchers
-        padding: EdgeInsets.fromLTRB(15, 15, 15, 15),
-        margin: EdgeInsets.all(10),
-        //height: 120,
-        constraints: new BoxConstraints(
-          maxHeight: 120,
-        ),
-        width: 4*size.width/5,
-        decoration: BoxDecoration(
-            color: Colors.black,
-            borderRadius: BorderRadius.all(Radius.circular(10))
-        ),
-        child: Row(
-          children: [
-            Expanded(
-              flex: 4,
-              child:Container(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Text(
-                      "Vale " + vouchers[i]["Valor"].toString() + "€",
-                      style: TextStyle(
-                        fontSize: 15,
-                        color: Colors.white,
+  Widget Voucher_View(int i){
+    return InkWell(
+      child:Container(
+        alignment: Alignment.center,
+        child: Container( //container dos vouchers
+          padding: EdgeInsets.fromLTRB(15, 15, 15, 15),
+          margin: EdgeInsets.all(10),
+          //height: 120,
+          constraints: new BoxConstraints(
+            maxHeight: 120,
+          ),
+          width: 4*size.width/5,
+          decoration: BoxDecoration(
+              color: Colors.black,
+              borderRadius: BorderRadius.all(Radius.circular(10))
+          ),
+          child: Row(
+            children: [
+              Expanded(
+                flex: 4,
+                child:Container(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Text(
+                        "Vale " + vouchers[i]["Valor"].toString() + "€",
+                        style: TextStyle(
+                          fontSize: 15,
+                          color: Colors.white,
+                        ),
                       ),
-                    ),
-                    Text(
-                      vouchers[i]["Pontos"].toString() + " pontos",
-                      style: TextStyle(
-                        fontSize: 15,
-                        color: Colors.white,
+                      Text(
+                        vouchers[i]["Pontos"].toString() + " pontos",
+                        style: TextStyle(
+                          fontSize: 15,
+                          color: Colors.white,
+                        ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ),
-            ),
-            Expanded(
-              flex: 6,
-              child:Container(
-                child: Image.network(
-                  marcas[getCorrectBrand(i)]["Logo"]["url"],
-                  fit: BoxFit.fitHeight,
+              Expanded(
+                flex: 6,
+                child:Container(
+                  child: Image.network(
+                    marcas[getCorrectBrand(i)]["Logo"]["url"],
+                    fit: BoxFit.fitHeight,
+                  ),
                 ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
+      onTap: (){
+        popUp(i, getCorrectBrand(i));
+      },
     );
   }
   
@@ -265,16 +270,33 @@ class Adquirir_Vouchers_State extends State<Adquirir_Vouchers>{
       );
   }
 
-  void showError(int v, int m) {
+  void popUp(int v, int m) {
     showDialog(
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: const Text("Tem certeza que pertende adquirir o seguinte voucher?"),
-          content: Text("errorMessage"),
+          title: const Text("Pretende adquiri este voucher?"),
+          content: Container(
+            child:Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text("Valor: "+vouchers[v]["Valor"].toString()+"€"),
+                Text("Pontos: "+vouchers[v]["Pontos"].toString()),
+                Text("Descrição: "+vouchers[v]["Descricao"]),
+                Text("Marca: "+marcas[m]["Nome"]),
+                Text("Prazo de Utilização: "+prepareDate(vouchers[m]["Data_Expirar"]["iso"]))
+              ],
+            ),
+          ),
           actions: <Widget>[
             new FlatButton(
-              child: const Text("OK"),
+              child: const Text("Cancelar"),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+            FlatButton(
+              child: const Text("Adquirir"),
               onPressed: () {
                 Navigator.of(context).pop();
               },
@@ -283,6 +305,13 @@ class Adquirir_Vouchers_State extends State<Adquirir_Vouchers>{
         );
       },
     );
+  }
+
+  String prepareDate(String text){
+    var date = text.replaceRange(10, text.length, '');
+    var aux = date.split("-");
+    date = aux[2]+"/"+aux[1]+"/"+aux[0];
+    return date;
   }
 
 }
