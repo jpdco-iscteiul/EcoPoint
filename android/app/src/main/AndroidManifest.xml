@@ -1,7 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.eco_point_app">
    <application
-        android:label="eco_point_app"
+        android:label="EcoPoint"
         android:icon="@mipmap/ic_launcher">
         <activity
             android:name=".MainActivity"
