@@ -1,5 +1,7 @@
 import 'dart:collection';
 
+import 'package:eco_point_app/Screens/Adquirir_Vouchers.dart';
+import 'package:eco_point_app/Screens/Library.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:parse_server_sdk/parse_server_sdk.dart';
@@ -18,11 +20,11 @@ class NavDrawer extends StatelessWidget {
             decoration: BoxDecoration(
                 color: kContrastColor,
                 image: DecorationImage(
-                    fit: BoxFit.fill,
-                    image: AssetImage('assets/images/Logo_s_texto.png'))),
+                    //fit: BoxFit.cover,
+                    image: AssetImage('assets/images/Logo.png'))),
           ),
           ListTile(
-            leading: Icon(Icons.input),
+            leading: Icon(Icons.home),
             title: Text('Home'),
             onTap: () => {
             Navigator.push(
@@ -33,27 +35,35 @@ class NavDrawer extends StatelessWidget {
 
           ),
           ListTile(
-            leading: Icon(Icons.input),
-            title: Text('Profile'),
+            leading: Icon(Icons.person),
+            title: Text('Perfil'),
             onTap: () => {},
           ),
           ListTile(
-            leading: Icon(Icons.verified_user),
+            leading: Icon(Icons.restore_from_trash),
             title: Text('Registar pesagem'),
             onTap: () => {Navigator.of(context).pop()},
           ),
           ListTile(
-            leading: Icon(Icons.settings),
+            leading: Icon(Icons.library_add),
             title: Text('Adquirir vouchers'),
-            onTap: () => {Navigator.of(context).pop()},
+            onTap: () => {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => Adquirir_Vouchers()),
+            )},
           ),
           ListTile(
-            leading: Icon(Icons.border_color),
-            title: Text('Biblioteca'),
-            onTap: () => {Navigator.of(context).pop()},
+            leading: Icon(Icons.list_alt_rounded),
+            title: Text('Vouchers Adquiridos'),
+            onTap: () => {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => Library()),
+            )},
           ),
           ListTile(
-            leading: Icon(Icons.exit_to_app),
+            leading: Icon(Icons.timelapse_outlined),
             title: Text('Histórico'),
             onTap: () => {Navigator.of(context).pop()},
           ),
