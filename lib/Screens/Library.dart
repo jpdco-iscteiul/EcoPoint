@@ -35,7 +35,7 @@ class Library_State extends State<Library>{
 
       drawer: NavDrawer(), //drawer=menu
       appBar: AppBar( //barra com o titulo
-        title: Text('Biblioteca'),
+        title: Text('Vouchers Adquiridos'),
         ),
       body: Column(
         children:[ //vetor da coluna
