@@ -8,6 +8,7 @@ import 'package:parse_server_sdk/parse_server_sdk.dart';
 import '../constants.dart';
 import 'Welcome/Components/NavDrawer.dart';
 
+// ignore: camel_case_types
 class Adquirir_Vouchers extends StatefulWidget{
   @override
   State<StatefulWidget> createState() => Adquirir_Vouchers_State();
@@ -16,6 +17,7 @@ class Adquirir_Vouchers extends StatefulWidget{
 
 class Adquirir_Vouchers_State extends State<Adquirir_Vouchers>{
 
+  var user;
   var marcas;
   var vouchers;
   int pontos;
@@ -38,6 +40,7 @@ class Adquirir_Vouchers_State extends State<Adquirir_Vouchers>{
       appBar: AppBar( //barra com o titulo
         title: Text('Adquirir Vouchers'),
       ),
+      //backgroundColor: kContrastLighterColor,
       body: Column(
         children:[ //vetor da coluna
           Container(
@@ -45,10 +48,18 @@ class Adquirir_Vouchers_State extends State<Adquirir_Vouchers>{
             height: 50,
             width: 2*size.width/3,
             decoration: BoxDecoration(
-              color: kPrimaryLightColor, //cores estão no constants.dart
-              borderRadius: BorderRadius.all(Radius.circular(10))
+              //color: kPrimaryLightColor, //cores estão no constants.dart
+              gradient: LinearGradient(
+                begin: Alignment.topRight,
+                end: Alignment.bottomLeft,
+                colors: [
+                  kPrimaryLightColor,
+                  kPrimaryColor,
+                ],
+              ),
+              borderRadius: BorderRadius.all(Radius.circular(10)),
             ),
-            child: Align(
+            child:  Align(
               alignment: Alignment.center,
               child: loadPoints(),
             ),
@@ -79,8 +90,11 @@ class Adquirir_Vouchers_State extends State<Adquirir_Vouchers>{
     });
   }
   void getUserPoints() async {
-    var user = await ParseUser.currentUser(); // await= garante que so passo para a proxima linha depois deste procedimento acabar
+    user = await ParseUser.currentUser(); // await= garante que so passo para a proxima linha depois deste procedimento acabar
 
+    setState(() {
+      pontos = null;
+    });
 
     var queryBuilder = QueryBuilder(ParseObject("Detalhes_Conta"))
       ..whereEqualTo("UserId", user);
@@ -93,6 +107,21 @@ class Adquirir_Vouchers_State extends State<Adquirir_Vouchers>{
     else{
 
     }
+  }
+
+  void acquireVoucher(var voucherId) async {
+      final Map<String, String> params = {
+        "user":user.objectId,
+        "voucher": voucherId
+      };
+
+      var result = await ParseCloudFunction("acquireVoucher").execute(parameters: params);
+
+      if(result.success){
+        print(result.result);
+        getUserPoints();
+      }
+
   }
 
   Widget getAllVouchersToShow(int p){
@@ -145,7 +174,11 @@ class Adquirir_Vouchers_State extends State<Adquirir_Vouchers>{
           ),
           width: 4*size.width/5,
           decoration: BoxDecoration(
-              color: Colors.black,
+              color: Color(int.parse(marcas[getCorrectBrand(i)]["Cor"])),
+              border: Border.all(
+                color: kContrastColor,
+                width: 2,
+              ),
               borderRadius: BorderRadius.all(Radius.circular(10))
           ),
           child: Row(
@@ -161,14 +194,14 @@ class Adquirir_Vouchers_State extends State<Adquirir_Vouchers>{
                         "Vale " + vouchers[i]["Valor"].toString() + "€",
                         style: TextStyle(
                           fontSize: 15,
-                          color: Colors.white,
+                          color: Color(int.parse(marcas[getCorrectBrand(i)]["Cor_Letra"])),
                         ),
                       ),
                       Text(
                         vouchers[i]["Pontos"].toString() + " pontos",
                         style: TextStyle(
                           fontSize: 15,
-                          color: Colors.white,
+                          color: Color(int.parse(marcas[getCorrectBrand(i)]["Cor_Letra"])),
                         ),
                       ),
                     ],
@@ -298,6 +331,7 @@ class Adquirir_Vouchers_State extends State<Adquirir_Vouchers>{
             FlatButton(
               child: const Text("Adquirir"),
               onPressed: () {
+                acquireVoucher(vouchers[v]["objectId"]);
                 Navigator.of(context).pop();
               },
             ),
