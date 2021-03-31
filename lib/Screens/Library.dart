@@ -17,7 +17,7 @@ class Library extends StatefulWidget{
 class Library_State extends State<Library>{
 
   var user;
-  var vouchers;
+  var vouchers = null;
   var pointer;
   Size size;
 
@@ -39,6 +39,27 @@ class Library_State extends State<Library>{
         ),
       body: Column(
         children:[ //vetor da coluna
+          Container(
+            margin: EdgeInsets.fromLTRB(15, 15, 15, 10), //margin= margem do objeto para fora; padding = moldura do objeto (para dentro)
+            height: 50,
+            width: 2*size.width/3,
+            decoration: BoxDecoration(
+              //color: kPrimaryLightColor, //cores estão no constants.dart
+              gradient: LinearGradient(
+                begin: Alignment.topRight,
+                end: Alignment.bottomLeft,
+                colors: [
+                  kPrimaryLightColor,
+                  kPrimaryColor,
+                ],
+              ),
+              borderRadius: BorderRadius.all(Radius.circular(10)),
+            ),
+            child:  Align(
+              alignment: Alignment.center,
+              child: countVouchers(),
+            ),
+          ),
           getAllVouchersToShow(pointer),
         ],
       ),
@@ -62,6 +83,22 @@ class Library_State extends State<Library>{
 
     for(final x in vouchers){
       print(x["VoucherId"]["MarcaId"]["Nome"]);
+    }
+  }
+
+  Widget countVouchers() {
+    if (vouchers == null) {
+      return CircularProgressIndicator();
+    }
+    else {
+      return Text(
+        vouchers.length.toString() + " Vouchers",
+        style: TextStyle(
+          color: Colors.white,
+          fontSize: 25,
+          fontWeight: FontWeight.bold,
+        ),
+      );
     }
   }
 
@@ -115,7 +152,11 @@ class Library_State extends State<Library>{
           ),
           width: 4*size.width/5,
           decoration: BoxDecoration(
-              color: Colors.black,
+              color: Color(int.parse(vouchers[i]["VoucherId"]["MarcaId"]["Cor"])),
+              border: Border.all(
+                color: kContrastColor,
+                width: 2,
+              ),
               borderRadius: BorderRadius.all(Radius.circular(10))
           ),
           child: Row(
@@ -131,14 +172,14 @@ class Library_State extends State<Library>{
                         "Vale " + vouchers[i]["VoucherId"]["Valor"].toString() + "€",
                         style: TextStyle(
                           fontSize: 15,
-                          color: Colors.white,
+                          color: Color(int.parse(vouchers[i]["VoucherId"]["MarcaId"]["Cor_Letra"])),
                         ),
                       ),
                       Text(
                         vouchers[i]["VoucherId"]["Pontos"].toString() + " pontos",
                         style: TextStyle(
                           fontSize: 15,
-                          color: Colors.white,
+                          color: Color(int.parse(vouchers[i]["VoucherId"]["MarcaId"]["Cor_Letra"])),
                         ),
                       ),
                     ],
@@ -159,7 +200,7 @@ class Library_State extends State<Library>{
         ),
       ),
       onTap: (){
-        //popUp(i, getCorrectBrand(i));
+        popUp(i);
       },
     );
   }
@@ -171,7 +212,7 @@ class Library_State extends State<Library>{
       return  Container(
         padding: EdgeInsets.all(10),
         child: Row(
-          mainAxisAlignment: MainAxisAlignment.end,
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
             IconButton(
               icon: Icon(
@@ -211,4 +252,40 @@ class Library_State extends State<Library>{
       );
   }
 
+  void popUp(int v) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text(vouchers[v]["VoucherId"]["MarcaId"]["Nome"]),
+          content: Container(
+            child:Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text("Valor: "+vouchers[v]["VoucherId"]["Valor"].toString()+"€"),
+                Text("Pontos: "+vouchers[v]["VoucherId"]["Pontos"].toString()),
+                Text("Descrição: "+vouchers[v]["VoucherId"]["Descricao"]),
+                Text("Prazo de Utilização: "+prepareDate( vouchers[v]["VoucherId"]["Data_Expirar"]["iso"]))
+              ],
+            ),
+          ),
+          actions: <Widget>[
+            new FlatButton(
+              child: const Text("Cancelar"),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  String prepareDate(String text){
+    var date = text.replaceRange(10, text.length, '');
+    var aux = date.split("-");
+    date = aux[2]+"/"+aux[1]+"/"+aux[0];
+    return date;
+  }
 }

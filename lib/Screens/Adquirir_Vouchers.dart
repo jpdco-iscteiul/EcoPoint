@@ -263,7 +263,7 @@ class Adquirir_Vouchers_State extends State<Adquirir_Vouchers>{
       return  Container(
         padding: EdgeInsets.all(10),
         child: Row(
-          mainAxisAlignment: MainAxisAlignment.end,
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
             IconButton(
               icon: Icon(
