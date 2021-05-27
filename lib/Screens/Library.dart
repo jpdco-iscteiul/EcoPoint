@@ -273,6 +273,15 @@ class Library_State extends State<Library>{
               child: const Text("Cancelar"),
               onPressed: () {
                 Navigator.of(context).pop();
+                print(vouchers[v]["objectId"]);
+              },
+            ),
+            new FlatButton(
+              child: const Text("Utilizar"),
+              onPressed: () {
+                useVoucher(vouchers[v]["objectId"]);
+                fetchUserVouchers();
+                Navigator.of(context).pop();
               },
             ),
           ],
@@ -286,5 +295,19 @@ class Library_State extends State<Library>{
     var aux = date.split("-");
     date = aux[2]+"/"+aux[1]+"/"+aux[0];
     return date;
+  }
+
+  Future<void> useVoucher(voucher) async {
+
+    final Map<String, String> params = {
+      "voucherID": voucher
+    };
+
+    var result = await ParseCloudFunction("useVoucher").execute(parameters: params);
+
+    if(result.success){
+      print(result.result);
+    }
+
   }
 }
